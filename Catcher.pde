@@ -15,7 +15,7 @@ class Catcher {
     x = 20;
     y = 460;
     w = 40;
-    h= 40;
+    h = 40;
     speedX = 0;
   }
 
@@ -34,26 +34,33 @@ class Catcher {
   }
 
   void move() {
+    // Check to see if a key is pressed
+    if (keyCode != LEFT && keyCode != RIGHT) {
+      speedX = 0;
+    }
+    
     //allow rectangle to move on the bottom
-    x = x + speedX;
+    x += speedX;
     //moving box right
     if (x >=width-40) {
       x= 460;
-      speedX *= -.1;
+      speedX = 0;
     }
     //moving box left
-    if (x <=0) {
+    if (x <= 0) {
       x=0;
-      speedX *= -.1;
+      speedX = 0;
     }
+    
+    println("Speed X " + speedX);
   }
 
   void keyPressed() {
     if (keyCode == RIGHT) {
-      speedX= speedX + .2;
-    } 
+      speedX = 2.5f;
+    }
     if (keyCode == LEFT) {
-      speedX= speedX - .2;
+      speedX = -2.5f;
     }
     if (key == ' ') { //that means spacebar to stop car
       speedX= 0;

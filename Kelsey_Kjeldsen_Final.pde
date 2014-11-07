@@ -1,7 +1,8 @@
 
 Catcher catcher;    // One catcher object
 Timer timer;        // One timer object
-Drop[] drops;       // An array of drop objects
+//Drop[] drops;       // An array of drop objects
+ArrayList<Drop> drops;
 int totalDrops = 0; // totalDrops
 //setting the boxes
 Box box1;
@@ -10,12 +11,12 @@ Box box3;
 Box box4;
 
 // A boolean to let us know if the game is over
-boolean gameOver = false;
+boolean gameOver;
 
 // Variables to keep track of score, level, lives left
-int score = 0;      // User's score
+int score;      // User's score
 int level = 1;      // What level are we on
-int lives = 5;     // 5 lives per level 
+int lives;     // 5 lives per level 
 int levelCounter = 0; //counting for the levels 
 
 PFont f;
@@ -25,6 +26,11 @@ void setup() {
   smooth();
   ellipseMode(CENTER);
 
+  totalDrops = 0;
+  gameOver = false;
+  lives = 5;
+  score = 0;
+
   /*code adapted from:
    // Learning Processing
    // Daniel Shiffman
@@ -32,7 +38,8 @@ void setup() {
    ********************************************************/
 
   catcher = new Catcher(); // Create the catcher 
-  drops = new Drop[1000];    // Create 1000 spots in the array (each level now just has 25 drops)
+  //  drops = new Drop[1000];    // Create 1000 spots in the array (each level now just has 25 drops)
+  drops = new ArrayList<Drop>();
   timer = new Timer(500);   // Create a timer that goes off every .5 second
   timer.start();             // Starting the timer
 
@@ -66,34 +73,59 @@ void draw() {
 
     // Display the catcher
     catcher.display(); 
-    catcher.move();
-    catcher.keyPressed();
+    if (keyPressed) {
+//      catcher.move();
+        if (keyCode == LEFT) {
+          catcher.x -= 2.5f;
+        }
+        if (keyCode == RIGHT) {
+          catcher.x += 2.5f;
+        }
+    }
+//    catcher.keyPressed();
 
     // Check the timer
     if (timer.isFinished()) {
       // if timer is finished send another drop
       // Initialize one drop
-      drops[totalDrops] = new Drop();
+      //      drops[totalDrops] = new Drop();
+      Drop drop = new Drop();
+      drops.add(drop);
       totalDrops++;
-      if (totalDrops >= drops.length) { 
+      if (totalDrops >= 1000) { 
         // start array over
         totalDrops=0;
       }
       timer.start();
-    }
+    } 
+    println(drops.size());
+
 
     // Move and display all drops
-    for (int i = 0; i < totalDrops; i++ ) {
-      drops[i].move();
-      drops[i].display();
+    //    for (int i = 0; i < totalDrops; i++ ) {
+    //      drops[i].move();
+    //      drops[i].display();
+    //      // Everytime you catch a drop, the score goes up
+    //      if (catcher.isCollidingCircle(drops[i])) {
+    //        drops[i].caught();
+    //        levelCounter++; //count this in amount of drops before new level
+    //        score++;
+    //      }
+    //    }
+
+    for (int i = 0; i < drops.size (); i++ ) {
+      drops.get(i).move();
+      drops.get(i).display();
+
       // Everytime you catch a drop, the score goes up
-      if (catcher.isCollidingCircle(drops[i])) {
-        drops[i].caught();
+      if (catcher.isCollidingCircle(drops.get(i))) {
+        drops.get(i).caught();
         levelCounter++; //count this in amount of drops before new level
         score++;
       }
     }
 
+    // collision detection
     if (catcher.isCollidingBox(box1)) {
       lives--;
       box1.resetWhenCollisionDetected(); //allow the box to go back to the top
@@ -152,7 +184,7 @@ void draw() {
 void keyPressed() {
   if (gameOver) {
     if (key == 'r') {
-      gameOver=false;
+      //      gameOver=false;
       setup();
     }
   }
