@@ -1,4 +1,3 @@
-
 Catcher catcher;    // One catcher object
 Timer timer;        // One timer object
 //Drop[] drops;       // An array of drop objects
@@ -72,17 +71,25 @@ void draw() {
     box4.display();
 
     // Display the catcher
-    catcher.display(); 
+
     if (keyPressed) {
-//      catcher.move();
-        if (keyCode == LEFT) {
-          catcher.x -= 2.5f;
+      //      catcher.move();
+      if (keyCode == LEFT) {
+        catcher.x -= 2.5f;
+        if(catcher.x <= 0) {
+         catcher.x =0;
         }
-        if (keyCode == RIGHT) {
-          catcher.x += 2.5f;
+      }
+      if (keyCode == RIGHT) {
+        catcher.x += 2.5f;
+        if(catcher.x >= width-40) {
+         catcher.x =460;
         }
+      }
     }
-//    catcher.keyPressed();
+
+    catcher.display(); 
+    //    catcher.keyPressed();
 
     // Check the timer
     if (timer.isFinished()) {

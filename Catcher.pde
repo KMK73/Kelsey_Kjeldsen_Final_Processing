@@ -35,9 +35,6 @@ class Catcher {
 
   void move() {
     // Check to see if a key is pressed
-    if (keyCode != LEFT && keyCode != RIGHT) {
-      speedX = 0;
-    }
     
     //allow rectangle to move on the bottom
     x += speedX;
