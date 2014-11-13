@@ -1,4 +1,5 @@
 class Catcher {
+  PShape catcherImage;
   float w;   // width
   float h; //height
   color col; // color
@@ -11,46 +12,33 @@ class Catcher {
    adapted by: Kelsey Kjeldsen
    ********************************************************/
   Catcher() {
-    col = color(255, 0, 0);
-    x = 20;
-    y = 460;
-    w = 40;
-    h = 40;
+    catcherImage = loadShape("Game_character.svg");
+    //    col = color(255, 0, 0);
+    x = width/2;
+    y = displayY - 80;
+    //need to fix width/height percentages
+    w = catcherImage.width* (displayWidth*.075);
+    h = catcherImage.height* (displayHeight*.1);
     speedX = 0;
   }
 
   void display() {
     stroke(0);
     fill(col);
-    rect(x, y, w, h);
+    //    rect(x, y, w, h);
+    shape(catcherImage, x, y, w, h);
     if (level ==2) {
-      w=30;
-      h=30;
+      catcherImage.scale(1.5);
+//      w=30;
+//      h=30;
     }
     if (level >=3) { //make the player catcher smaller as levels go up
-      w=20;
-      h=20;
+      catcherImage.scale(1.5);
+//      w=20;
+//      h=20;
     }
   }
 
-  void move() {
-    // Check to see if a key is pressed
-    
-    //allow rectangle to move on the bottom
-    x += speedX;
-    //moving box right
-    if (x >=width-40) {
-      x= 460;
-      speedX = 0;
-    }
-    //moving box left
-    if (x <= 0) {
-      x=0;
-      speedX = 0;
-    }
-    
-    println("Speed X " + speedX);
-  }
 
   void keyPressed() {
     if (keyCode == RIGHT) {
@@ -95,8 +83,9 @@ class Catcher {
 
   //Box b is made for a temporary reference of either box1 or box2 when they pass through the boolean
   boolean isCollidingBox(Box b) {
-    float myX2 = x + w; // box x and width
-    float myY2 = y + h; //box y and height
+    float myX2 = x+ catcherImage.width; // box x and width
+//    float myX2 = x + w; // box x and width
+    float myY2 = y + catcherImage.height; //box y and height
     float otherX2 = b.boxX + b.boxWidth;
     float otherY2 = b.boxY + b.boxHeight;  
 
