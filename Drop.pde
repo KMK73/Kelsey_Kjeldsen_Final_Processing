@@ -6,7 +6,8 @@
  ********************************************************/
 
 class Drop {
-  float x, y;   
+  float x, y;
+  PImage drop;  
   float speed; 
   color c;
   float r;     
@@ -15,11 +16,12 @@ class Drop {
   boolean caught = false;
 
   Drop() {
-    r = 20;               
+    r = 30;               
     x = random(width);    
     y = -r*4;              // Start a little above the window
     speed = random(3, 6);   // Pick a random speed
-    c = color(50, 100, 150);
+//    c = color(50, 100, 150);
+    drop = loadImage ("coin.png");
   }
 
   // Move the drop down
@@ -39,18 +41,19 @@ class Drop {
   // Display the drop
   void display() {
     // Display the drop
-    if (level <=1) {
-      fill(c);
-    }
-    if (level==2) {
-      fill(#7600FF);
-    }
-    if (level >=3) {
-      fill(#FF9F0D);
-    }
+//    if (level <=1) {
+//      fill(c);
+//    }
+//    if (level==2) {
+//      fill(#7600FF);
+//    }
+//    if (level >=3) {
+//      fill(#FF9F0D);
+//    }
     noStroke();
     for (int i = 2; i < r; i++ ) {
-      ellipse(x, y, r, r);
+//      ellipse(x, y, r, r);
+        image(drop, x, y, r, r);
     }
   }
 

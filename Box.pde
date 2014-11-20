@@ -1,5 +1,6 @@
 class Box {
 
+  PImage bricks;
   float speedY; //speed down for rect
   float boxWidth;
   float boxHeight;
@@ -7,17 +8,19 @@ class Box {
   float boxY;
 
   Box () {
-    boxHeight = random (20, 40);
-    boxWidth = random (displayWidth*.10, displayWidth*.3); //40% width max
+    bricks = loadImage("bricks.jpg");
+    boxHeight = random (20, displayHeight*.075);
+    boxWidth = random (displayWidth*.10, displayWidth*.25); //40% width max
     boxX= random (0, width -40);
-    boxY= random (-boxHeight, boxHeight);
+    boxY= random (-100, 0);
     speedY= random(1, 4);
   }
 
   void display () {
     fill (#00FF39);
     stroke(1);
-    rect(boxX, boxY, boxWidth, boxHeight);
+//    rect(boxX, boxY, boxWidth, boxHeight);
+    image(bricks, boxX, boxY, boxWidth, boxHeight); 
     boxY= boxY + speedY;
   }
 

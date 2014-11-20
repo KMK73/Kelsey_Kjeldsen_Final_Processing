@@ -1,56 +1,75 @@
 class Catcher {
-  PShape catcherImage;
-  float w;   // width
-  float h; //height
-  color col; // color
+  PImage catcherImage;
+  int w;   // width
   float x, y; // location
   float speedX;
-
   /*code adapted from:
    // Learning Processing
    // Daniel Shiffman
    adapted by: Kelsey Kjeldsen
    ********************************************************/
   Catcher() {
-    catcherImage = loadShape("Game_character.svg");
-    //    col = color(255, 0, 0);
+    catcherImage = loadImage("legoMan2.jpg");
+    w = int(displayWidth * .15);
+    catcherImage.resize(w, 0);
+    smooth();
     x = width/2;
-    y = displayY - 80;
+    y = displayY - 100;
     //need to fix width/height percentages
-    w = catcherImage.width* (displayWidth*.075);
-    h = catcherImage.height* (displayHeight*.1);
+//    w = catcherImage.width* scale;
+//    h = catcherImage.height* scale;
     speedX = 0;
+    println("WIDTH: " + w);
   }
 
   void display() {
     stroke(0);
-    fill(col);
-    //    rect(x, y, w, h);
-    shape(catcherImage, x, y, w, h);
+    image(catcherImage, x, y); 
+    println(displayWidth);
+
     if (level ==2) {
-      catcherImage.scale(1.5);
-//      w=30;
-//      h=30;
+      catcherImage.resize(65, 85);
+      //      w=30;
+      //      h=30;
     }
     if (level >=3) { //make the player catcher smaller as levels go up
-      catcherImage.scale(1.5);
-//      w=20;
-//      h=20;
+      catcherImage.resize(55, 75);
+      //      w=20;
+      //      h=20;
     }
   }
 
 
-  void keyPressed() {
-    if (keyCode == RIGHT) {
-      speedX = 2.5f;
+//  void keyPressed() {
+//    if (keyCode == RIGHT) {
+//      speedX = 2.5f;
+//    }
+//    if (keyCode == LEFT) {
+//      speedX = -2.5f;
+//    }
+//    if (key == ' ') { //that means spacebar to stop car
+//      speedX= 0;
+//    }
+//  }
+ 
+ void move () { 
+      // Display the catcher
+    if (keyPressed) {
+      //      catcher.move();
+      if (keyCode == LEFT) {
+        x -= 3.5f;
+        if (x <= 0) {
+          x =0;
+        }
+      }
+      if (keyCode == RIGHT) {
+          x += 3.5f;
+        if (x >= width- catcherImage.width) {
+            x =width-catcherImage.width;
+        }
+      }
     }
-    if (keyCode == LEFT) {
-      speedX = -2.5f;
-    }
-    if (key == ' ') { //that means spacebar to stop car
-      speedX= 0;
-    }
-  }
+ }
 
   /*code adapted from:
    http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
@@ -58,25 +77,31 @@ class Catcher {
    ********************************************************/
   boolean isCollidingCircle(Drop d) {
     //calculate the distance in absolute value of the drops and the rectangle
-    float circleDistanceX = abs(d.x - x - w/2);
-    float circleDistanceY = abs(d.y - y - h/2);
-
-    if (circleDistanceX > (w/2 + d.r)) { 
+    float circleDistanceX = abs(d.x - x - catcherImage.width/2);
+    float circleDistanceY = abs(d.y - y - catcherImage.height/2);
+    if (circleDistanceX > (catcherImage.width/2 + d.r)) { 
       return false;
     }
-    if (circleDistanceY > (h/2 + d.r)) { 
+    if (circleDistanceY > (catcherImage.height/2 + d.r)) { 
       return false;
     }
 
-    if (circleDistanceX <= (w/2)) { 
+    if (circleDistanceX <= (catcherImage.width/2)) { 
+      println("DISTANCE TO X: " + circleDistanceX);
+      println("DISTANCE TO Y: " + circleDistanceY);
+      println("WIDTH: " + w);
+
       return true;
     } 
-    if (circleDistanceY <= (h/2)) { 
+    if (circleDistanceY <= (catcherImage.height/2)) { 
+      println("DISTANCE TO X: " + circleDistanceX);
+      println("DISTANCE TO Y: " + circleDistanceY);
+
       return true;
     }
 
-    float cornerDistance_sq = pow(circleDistanceX - w/2, 2) +
-      pow(circleDistanceY - h/2, 2);
+    float cornerDistance_sq = pow(circleDistanceX - catcherImage.width/2, 2) +
+      pow(circleDistanceY - catcherImage.height/2, 2);
 
     return (cornerDistance_sq <= pow(d.r, 2));
   }
@@ -84,7 +109,7 @@ class Catcher {
   //Box b is made for a temporary reference of either box1 or box2 when they pass through the boolean
   boolean isCollidingBox(Box b) {
     float myX2 = x+ catcherImage.width; // box x and width
-//    float myX2 = x + w; // box x and width
+    //    float myX2 = x + w; // box x and width
     float myY2 = y + catcherImage.height; //box y and height
     float otherX2 = b.boxX + b.boxWidth;
     float otherY2 = b.boxY + b.boxHeight;  
