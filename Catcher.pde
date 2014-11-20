@@ -10,22 +10,20 @@ class Catcher {
    ********************************************************/
   Catcher() {
     catcherImage = loadImage("legoMan2.jpg");
-    w = int(displayWidth * .15);
+    w = int(displayWidth * .08);
     catcherImage.resize(w, 0);
     smooth();
     x = width/2;
-    y = displayY - 100;
+    y = displayY - catcherImage.height;
     //need to fix width/height percentages
-//    w = catcherImage.width* scale;
-//    h = catcherImage.height* scale;
+    //    w = catcherImage.width* scale;
+    //    h = catcherImage.height* scale;
     speedX = 0;
-    println("WIDTH: " + w);
   }
 
   void display() {
     stroke(0);
     image(catcherImage, x, y); 
-    println(displayWidth);
 
     if (level ==2) {
       catcherImage.resize(65, 85);
@@ -40,20 +38,20 @@ class Catcher {
   }
 
 
-//  void keyPressed() {
-//    if (keyCode == RIGHT) {
-//      speedX = 2.5f;
-//    }
-//    if (keyCode == LEFT) {
-//      speedX = -2.5f;
-//    }
-//    if (key == ' ') { //that means spacebar to stop car
-//      speedX= 0;
-//    }
-//  }
- 
- void move () { 
-      // Display the catcher
+  //  void keyPressed() {
+  //    if (keyCode == RIGHT) {
+  //      speedX = 2.5f;
+  //    }
+  //    if (keyCode == LEFT) {
+  //      speedX = -2.5f;
+  //    }
+  //    if (key == ' ') { //that means spacebar to stop car
+  //      speedX= 0;
+  //    }
+  //  }
+
+  void move () { 
+    // Display the catcher
     if (keyPressed) {
       //      catcher.move();
       if (keyCode == LEFT) {
@@ -63,13 +61,13 @@ class Catcher {
         }
       }
       if (keyCode == RIGHT) {
-          x += 3.5f;
+        x += 3.5f;
         if (x >= width- catcherImage.width) {
-            x =width-catcherImage.width;
+          x =width-catcherImage.width;
         }
       }
     }
- }
+  }
 
   /*code adapted from:
    http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
@@ -87,16 +85,9 @@ class Catcher {
     }
 
     if (circleDistanceX <= (catcherImage.width/2)) { 
-      println("DISTANCE TO X: " + circleDistanceX);
-      println("DISTANCE TO Y: " + circleDistanceY);
-      println("WIDTH: " + w);
-
       return true;
     } 
     if (circleDistanceY <= (catcherImage.height/2)) { 
-      println("DISTANCE TO X: " + circleDistanceX);
-      println("DISTANCE TO Y: " + circleDistanceY);
-
       return true;
     }
 

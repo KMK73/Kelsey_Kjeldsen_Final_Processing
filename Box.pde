@@ -10,7 +10,7 @@ class Box {
   Box () {
     bricks = loadImage("bricks.jpg");
     boxHeight = random (20, displayHeight*.075);
-    boxWidth = random (displayWidth*.10, displayWidth*.25); //40% width max
+    boxWidth = random (displayWidth*.10, displayWidth*.20); //40% width max
     boxX= random (0, width -40);
     boxY= random (-100, 0);
     speedY= random(1, 4);

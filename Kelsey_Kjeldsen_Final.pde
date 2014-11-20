@@ -43,8 +43,8 @@ void setup() {
 
   displayX = round(displayWidth*.8);
   displayY = round(displayHeight*.8); //have to round to make an int
-  int startImageWidth = int(displayWidth * .8);
-  startScreen.resize(startImageWidth, 0);
+  int startImageWidth = int(displayHeight * .8);
+  startScreen.resize(0, startImageWidth);
 
   size(displayX, displayY);
 
@@ -92,30 +92,11 @@ void draw() {
     text("SCORE " +score, width/2, height/2+40);
     text("To play again press SPACEBAR", width/2, height/2+80);
 
-    //    //key to start game 
-    //    if (keyPressed == true) {
-    //      gameOver= 1;
-    //    }
+
   }
   if (gameState==GAME_PLAYING) {
     background(255);
 
-    //    // Display the catcher
-    //    if (keyPressed) {
-    //      //      catcher.move();
-    //      if (keyCode == LEFT) {
-    //        catcher.x -= 3.5f;
-    //        if (catcher.x <= 0) {
-    //          catcher.x =0;
-    //        }
-    //      }
-    //      if (keyCode == RIGHT) {
-    //        catcher.x += 3.5f;
-    //        if (catcher.x >= width- catcherImage.width) {
-    //          catcher.x =width-catcherImage.width;
-    //        }
-    //      }
-    //    }
 
     //display catcher
     catcher.display(); 
@@ -179,7 +160,7 @@ void draw() {
     // Display number of lives left
     textFont(f, 14);
     fill(0);
-    textAlign(LEFT);
+    textAlign(LEFT); //need to reset this to keep it aligned after CENTER is called
     text("Lives left: " + lives, 10, 20);
     fill(#989898);
     stroke(1);
@@ -193,9 +174,8 @@ void draw() {
 void keyPressed() {
   switch(gameState) {
   case GAME_WAITING:
-    //check keys when waiting for game
+    //check keys when waiting for game and spacebar to start
     if (key == ' ') {
-      //do something for space 
       gameState = GAME_PLAYING;
     }
     break;
@@ -205,39 +185,22 @@ void keyPressed() {
 
   case GAME_OVER:
     if (key == ' ') {
+      //call restart function to start game again with spacebar
       restart();
     }
-    //        if( gameState == GAME_OVER) {
-    //          if (key == UP) {
-    //          setup();
-    //          }
-    //        }
     break;
   }
 }  
-//
-//if (gameState == GAME_OVER) {
-//  if (key == UP) {
-//    setup();
-//  }
-//}
-//}
-
 
 void restart() {
   gameState = GAME_WAITING;
 
+//reset variables
   totalDrops = 0;
-  //  gameOver = false;
   lives = 5;
   score = 0;
 
-  /*code adapted from:
-   // Learning Processing
-   // Daniel Shiffman
-   adapted by: Kelsey Kjeldsen
-   ********************************************************/
-
+//restarting the arrays and timer
   catcher = new Catcher(); // Create the catcher 
   drops = new ArrayList<Drop>();
   timer = new Timer(750);   // Create a timer that goes off every .5 second
