@@ -19,25 +19,15 @@ class Box {
   void display () {
     fill (#00FF39);
     stroke(1);
-//    rect(boxX, boxY, boxWidth, boxHeight);
+    //    rect(boxX, boxY, boxWidth, boxHeight);
     image(bricks, boxX, boxY, boxWidth, boxHeight); 
     boxY= boxY + speedY;
   }
 
-//  void reset() {
-//    if (boxY > height) {
-//      boxY=-10;
-//      boxX = random(width); //change x position at the top
-//      speedY = random(1, 2.5);
-//    }
-//  }
-
-  //needed to reset after a collision so lives dont reduce all at once
-  void resetWhenCollisionDetected() {
-    boxY=-10;
-    boxX = random(width); //change x position at the top
-    speedY = random(1, 2.5);
-  }
+//needed to reset after a collision so lives dont reduce all at once
+void resetWhenCollisionDetected() {
+  boxY=-10;
+  boxX = random(width); //change x position at the top
+  speedY = random(1, 2.5);
 }
-
-
+}

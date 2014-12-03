@@ -27,28 +27,13 @@ class Catcher {
 
     if (level ==2) {
       catcherImage.resize(65, 85);
-      //      w=30;
-      //      h=30;
+      y = displayY - catcherImage.height;
     }
     if (level >=3) { //make the player catcher smaller as levels go up
       catcherImage.resize(55, 75);
-      //      w=20;
-      //      h=20;
+      y = displayY - catcherImage.height;
     }
   }
-
-
-  //  void keyPressed() {
-  //    if (keyCode == RIGHT) {
-  //      speedX = 2.5f;
-  //    }
-  //    if (keyCode == LEFT) {
-  //      speedX = -2.5f;
-  //    }
-  //    if (key == ' ') { //that means spacebar to stop car
-  //      speedX= 0;
-  //    }
-  //  }
 
   void move () { 
     // Display the catcher
