@@ -3,6 +3,12 @@ Catcher catcher;    // One catcher object
 Timer timer;  // Timer for drops
 BoxTimer boxTimer; //timer for bricks
 
+
+int timeLimit = 30000;
+int timeStart = millis();
+int timeRemaining;
+int timePassed;
+
 //sound library coin sound
 Minim minim;
 AudioSample coin; 
@@ -10,15 +16,17 @@ AudioSample boxSound;
 
 //load start screen image
 PImage startScreen;
-int stage; //stage for game
 
 // An array of drop objects
 ArrayList<Drop> drops;
 int totalDrops = 0; // totalDrops
 
+/*GAME STATES VARIABLES
+   *********************************************************************/
 final int GAME_WAITING = 0;
 final int GAME_PLAYING = 1;
 final int GAME_OVER = 2;
+
 
 //setting the boxes
 ArrayList<Box> boxes;
@@ -29,7 +37,7 @@ int displayX;
 int displayY;
 
 // A variable to start/end game 
-//boolean gameOver;
+//boolean gamePause;
 int gameState;
 
 // Variables to keep track of score, level, lives left
@@ -40,37 +48,38 @@ int levelCounter = 0; //counting for the levels
 
 PFont f;
 
+/* VOID SETUP 
+   *********************************************************************/
 void setup() {
-  //make a dynamic screen size and needs to round because it has to be an int
+
   //  start screen image load
   startScreen = loadImage("startScreen.jpg");
+  println ("timeStart1 " + timeStart);
 
   displayX = round(displayWidth*.8);
   displayY = round(displayHeight*.8); //have to round to make an int
-  //  int startImageWidth = int(displayHeight * .8);
-  //  startScreen.resize(0, startImageWidth);
-
   size(displayX, displayY);
 
   image(startScreen, 0, 0, displayX, displayY);
 
+  //timer for until game ends
+  int timeLimit = 30000;
+  timeStart = millis();
+
+
   //sound import
   minim = new Minim(this);
-
   coin = minim.loadSample("coin-04.wav", 512);
   boxSound = minim.loadSample("collision.wav", 512);
-  // if a file doesn't exist, loadSample will return null
-  if ( coin == null ) println("Didn't get coin sample music!");
-  if ( boxSound == null ) println("Didn't get collision box sound!");
-
+  
   //start of game, when it ends value is 2 (game actually over)
   gameState = GAME_WAITING;
 
   smooth();
   ellipseMode(CENTER);
+  f = createFont("font", 12, true); 
 
   totalDrops = 0;
-  //  gameOver = false;
   lives = 5;
   score = 0;
 
@@ -79,13 +88,10 @@ void setup() {
    // Daniel Shiffman
    adapted by: Kelsey Kjeldsen
    ********************************************************/
-
   catcher = new Catcher(); // Create the catcher 
   drops = new ArrayList<Drop>();
   timer = new Timer(750);   // Create a timer that goes off every .5 second
   timer.start();             // Starting the timer
-
-  f = createFont("font", 12, true); 
 
   //array of boxes
   boxes = new ArrayList<Box>();
@@ -94,9 +100,12 @@ void setup() {
   totalBoxes = 0;
 }
 
+/*VOID DRAW 
+   ********************************************************/
 void draw() {
 
-  // If the game is over
+/*GAME OVER FUNCTION
+   ********************************************************/
   if (gameState==GAME_OVER) {
     background(255);
     textFont(f, 40);
@@ -108,15 +117,35 @@ void draw() {
     text("SCORE " +score, width/2, height/2+40);
     text("To play again press SPACEBAR", width/2, height/2+80);
   }
-  if (gameState==GAME_PLAYING) {
-    background(255);
 
+/*PLAYING GAME
+   ********************************************************/
+  if (gameState==GAME_PLAYING) {
+    //background white
+    background(255);
 
     //display catcher
     catcher.display(); 
     catcher.move();
 
-    // Check the drops timer
+/*COUNTDOWN TIMER for time remaining in game
+   ********************************************************/
+    timePassed = (millis() - timeStart);
+    timeRemaining = (timeLimit - timePassed);
+    println ("timeRemaining"+ timeRemaining); 
+    println ("timePassed" + timePassed);
+    println ("timeStart2 " + timeStart);
+    println ("timeLimit" + timeLimit); 
+    
+    //when timer hits 0 seconds game over 
+    if (timeRemaining <=0) {
+      gameState = GAME_OVER;
+      timeStart = 0; //reseting the timer start     
+    }
+      
+
+/*DROP TIMER
+   ********************************************************/
     if (timer.isFinished()) {
       // if timer is finished send another drop
       // Initialize one drop
@@ -129,9 +158,9 @@ void draw() {
       }
       timer.start();
     } 
-    println(drops.size());
 
-    // Check the box timer
+/*BRICKS TIMER
+   ********************************************************/
     if (boxTimer.isFinished()) {
       // if timer is finished send another box
       // Initialize one drop
@@ -144,8 +173,9 @@ void draw() {
       }
       boxTimer.start();
     } 
-    println(drops.size());
 
+/*DROPS COLLISION and DISPLAY
+   ********************************************************/
     for (int i = 0; i < drops.size (); i++ ) {
       drops.get(i).move();
       drops.get(i).display();
@@ -154,12 +184,14 @@ void draw() {
       if (catcher.isCollidingCircle(drops.get(i))) {
         drops.get(i).caught();
         coin.trigger(); //trigger playing sound when collision occurs
-        levelCounter++; //count this in amount of drops before new level
+        //        levelCounter++; //count this in amount of drops before new level
         score++;
       }
     }
 
 
+/*BRICKS COLLISION and DISPLAY
+   ********************************************************/
     for (int i = 0; i < boxes.size (); i++ ) {
       boxes.get(i).display();
       // collision detection
@@ -170,23 +202,14 @@ void draw() {
         boxes.remove(i);
         //If lives reach 0 the game is over
         if (lives <= 0) {
-          gameState = GAME_OVER; //2 is the game end value
+          gameState = GAME_OVER; 
         }
       }
     }
 
-    // If 25 drops are caught, that level is over!
-    if (levelCounter >= 10) { 
-      // Go up a level
-      level++;
-      // Reset all game elements
-      levelCounter = 0;
-      //lives++; //add a life every level 
-      totalDrops = 0;
-      totalBoxes = 0;
-    }
 
-
+/*TOP ELEMENTS on game screen. Lives left, time remaining, game score
+   ********************************************************/
     // Display number of lives left
     textFont(f, 14);
     fill(0);
@@ -196,16 +219,19 @@ void draw() {
     stroke(1);
     rect(10, 24, lives*20, 20); //line showing levels and the width is adjusted everytime you lose a life
     fill(0);
-    text("Level: " + level, 300, 20);
+    text("Time Left: " + (timeRemaining)/1000, 300, 20); 
     text("Score: " + score, 300, 40);
   }
 }
 
+/*KEYS FOR CHANGING GAME STATES
+   ********************************************************/
 void keyPressed() {
   switch(gameState) {
   case GAME_WAITING:
     //check keys when waiting for game and spacebar to start
     if (key == ' ') {
+      timeStart = 0; //want to make sure it starts at 0
       gameState = GAME_PLAYING;
     }
     break;
@@ -222,6 +248,8 @@ void keyPressed() {
   }
 }  
 
+/*RESETING THE GAME AFTER GAME ENDS
+   ********************************************************/
 void restart() {
   gameState = GAME_WAITING;
 
@@ -230,6 +258,8 @@ void restart() {
   totalDrops = 0;
   lives = 5;
   score = 0;
+  timeStart = 0;
+  timeRemaining = 30000;
 
   //restarting the arrays and timer
   catcher = new Catcher(); // Create the catcher 
@@ -242,4 +272,5 @@ void restart() {
   boxTimer= new BoxTimer(1000);
   boxTimer.start();
 }
+
 

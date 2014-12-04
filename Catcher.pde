@@ -40,13 +40,13 @@ class Catcher {
     if (keyPressed) {
       //      catcher.move();
       if (keyCode == LEFT) {
-        x -= 3.5f;
+        x -= 4f;
         if (x <= 0) {
           x =0;
         }
       }
       if (keyCode == RIGHT) {
-        x += 3.5f;
+        x += 4f;
         if (x >= width- catcherImage.width) {
           x =width-catcherImage.width;
         }
