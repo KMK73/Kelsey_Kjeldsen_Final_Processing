@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1224px" height="792px"
+	 viewBox="0 0 1224 792" enable-background="new 0 0 1224 792" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  width="1224" height="793.9" bottomLeftOrigin="true" x="0" y="0"></sliceSourceBounds>
+		<optimizationSettings>
+			<targetSettings  targetSettingsID="0" fileFormat="PNG24Format">
+				<PNG24Format  transparency="true" interlaced="false" filtered="false" noMatteColor="false" matteColor="#FFFFFF">
+					</PNG24Format>
+			</targetSettings>
+		</optimizationSettings>
+	</sfw>
+</metadata>
+<image overflow="visible" width="600" height="450" xlink:href="lego-background.jpg"  transform="matrix(2.04 0 0 1.7641 2.794722e-03 -1.8655)">
+</image>
+<rect x="373.8" y="114" fill="none" width="836.2" height="132"/>
+<text transform="matrix(1 0 0 1 470.4969 181.9185)" fill="#ED1C24" font-family="'Rockwell-Bold'" font-size="100">LEGO FALLS</text>
+<rect x="232.1" y="246" fill="none" width="903.8" height="253.8"/>
+<text transform="matrix(1 0 0 1 290.1861 293.5488)"><tspan x="0" y="0" fill="#39B54A" font-family="'Rockwell-Bold'" font-size="70">You have 30 seconds to </tspan><tspan x="-1.1" y="84" fill="#39B54A" font-family="'Rockwell-Bold'" font-size="70">catch as many coins as </tspan><tspan x="247.9" y="168" fill="#39B54A" font-family="'Rockwell-Bold'" font-size="70">you can!</tspan></text>
+<rect x="232.1" y="522" fill="none" width="903.8" height="169.8"/>
+<text transform="matrix(1 0 0 1 312.1119 569.5759)"><tspan x="0" y="0" fill="#0000FF" font-family="'Rockwell-Bold'" font-size="70">PRESS SPACEBAR TO </tspan><tspan x="256" y="84" fill="#0000FF" font-family="'Rockwell-Bold'" font-size="70">START</tspan></text>
+</svg>

@@ -9,18 +9,17 @@ class Drop {
   float x, y;
   PImage drop;  
   float speed; 
-  color c;
   float r;     
 
   // New variable to keep track of whether drop is caught
   boolean caught = false;
 
   Drop() {
-    r = 30;               
+    r = 50;               
     x = random(width);    
     y = -r*4;              // Start a little above the window
     speed = random(3, 6);   // Pick a random speed
-    drop = loadImage ("coin.png");
+    drop = loadImage ("star coin.png");
   }
 
   // Move the drop down

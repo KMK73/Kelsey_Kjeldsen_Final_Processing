@@ -1,5 +1,6 @@
 class Catcher {
   PImage catcherImage;
+//  PShape catcherImage;
   int w;   // width
   float x, y; // location
   float speedX;
@@ -9,30 +10,18 @@ class Catcher {
    adapted by: Kelsey Kjeldsen
    ********************************************************/
   Catcher() {
-    catcherImage = loadImage("legoMan2.jpg");
+    catcherImage = loadImage("legoMan3.png");
     w = int(displayWidth * .08);
     catcherImage.resize(w, 0);
     smooth();
     x = width/2;
     y = displayY - catcherImage.height;
-    //need to fix width/height percentages
-    //    w = catcherImage.width* scale;
-    //    h = catcherImage.height* scale;
     speedX = 0;
   }
 
   void display() {
     stroke(0);
     image(catcherImage, x, y); 
-
-    if (level ==2) {
-      catcherImage.resize(65, 85);
-      y = displayY - catcherImage.height;
-    }
-    if (level >=3) { //make the player catcher smaller as levels go up
-      catcherImage.resize(55, 75);
-      y = displayY - catcherImage.height;
-    }
   }
 
   void move () { 
@@ -40,13 +29,13 @@ class Catcher {
     if (keyPressed) {
       //      catcher.move();
       if (keyCode == LEFT) {
-        x -= 4f;
+        x -= 5f;
         if (x <= 0) {
           x =0;
         }
       }
       if (keyCode == RIGHT) {
-        x += 4f;
+        x += 5f;
         if (x >= width- catcherImage.width) {
           x =width-catcherImage.width;
         }

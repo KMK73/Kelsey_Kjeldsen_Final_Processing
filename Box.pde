@@ -8,7 +8,7 @@ class Box {
   float boxY;
 
   Box () {
-    bricks = loadImage("bricks.jpg");
+    bricks = loadImage("bricks.png");
     boxHeight = random (20, displayHeight*.075);
     boxWidth = random (displayWidth*.10, displayWidth*.20); //40% width max
     boxX= random (0, width -40);
