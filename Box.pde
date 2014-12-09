@@ -19,7 +19,6 @@ class Box {
   void display () {
     fill (#00FF39);
     stroke(1);
-    //    rect(boxX, boxY, boxWidth, boxHeight);
     image(bricks, boxX, boxY, boxWidth, boxHeight); 
     boxY= boxY + speedY;
   }

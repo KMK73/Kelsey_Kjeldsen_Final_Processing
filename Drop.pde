@@ -20,6 +20,7 @@ class Drop {
     y = -r*4;              // Start a little above the window
     speed = random(3, 6);   // Pick a random speed
     drop = loadImage ("star coin.png");
+//    drop = _drop;
   }
 
   // Move the drop down
@@ -40,14 +41,14 @@ class Drop {
   void display() {
     noStroke();
     for (int i = 2; i < r; i++ ) {
-        image(drop, x, y, r, r);
+        image(dropImage, x, y, r, r);
     }
   }
 
   // If the drop is caught
   void caught() {
-    speed =0; //stop drop from moving and set location far off screen
-    y = -1000;
+//    speed =0; //stop drop from moving and set location far off screen
+//    y = -1000;
   }
 }
 

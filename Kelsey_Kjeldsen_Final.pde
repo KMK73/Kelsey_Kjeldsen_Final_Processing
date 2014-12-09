@@ -43,23 +43,29 @@ int displayY;
 int score;      // User's score
 int lives;     // 5 lives per level 
 int bestScore;
+
 PImage catcherImage;
+PImage dropImage;
+int r = 50; //radius of drop image
+int y;
 
 
 /* VOID SETUP 
  *********************************************************************/
 void setup() {
 
+  dropImage = loadImage ("star coin.png");
   //  start screen image load
   startScreen = loadImage("startScreen1.png");
   gamePlayingImage = loadImage("grass background.jpg");
-  catcherImage = loadImage("legoMan3.png");
+  //  gamePlayingImage = loadImage("grass background 2.jpg");
 
-  displayX = round(displayWidth*.8);
+  displayX = round(displayWidth*.8);  
   displayY = round(displayHeight*.85); //have to round to make an int
   size(displayX, displayY);
 
   image(startScreen, 0, 0, displayX, displayY);
+
 
   //timer for until game ends
   timeLimit = 30000;
@@ -79,19 +85,19 @@ void setup() {
   f = createFont("LEGOBRIX", 20, true); 
 
 
-  totalDrops = 0;
-  lives = 3; //3 lives 
+  //  totalDrops = 0;
+  lives = 2; //3 lives 
   score = 0;
   bestScore = 0;
 
   catcher = new Catcher(); // Create the catcher 
   drops = new ArrayList<Drop>();
-  timer = new Timer(600);   // Create a timer that goes off every .5 second
+  timer = new Timer(500);   // Create a timer that goes off every .5 second
   timer.start();             // Starting the timer
 
   //array of boxes
   boxes = new ArrayList<Box>();
-  boxTimer = new BoxTimer (900);   // Create a timer for bricks, goes off every .5 second
+  boxTimer = new BoxTimer (1500 );   // Create a timer for bricks, goes off every .5 second
   boxTimer.start();  // Starting the timer for bricks
   totalBoxes = 0;
 }
@@ -106,7 +112,8 @@ void draw() {
   switch (gameState) {
   case GAME_OVER: 
     {
-      image(gamePlayingImage, 0, 0, displayX, displayY);      
+      image(gamePlayingImage, 0, 0, displayX, displayY);  
+
       textFont(f, 40);
       textAlign(CENTER);
       fill(0); //black text
@@ -125,8 +132,11 @@ void draw() {
   switch (gameState) {
   case GAME_PLAYING: 
     {
+      //removing start screen from memory cache 
+      g.removeCache(startScreen);
       //background image
-      image(gamePlayingImage, 0, 0, displayX, displayY);
+      //      image(gamePlayingImage, 0, 0, displayX, displayY);
+      background(#3bccdd);
 
       //display catcher
       catcher.display(); 
@@ -152,9 +162,11 @@ void draw() {
         Drop drop = new Drop();
         drops.add(drop);
         totalDrops++;
-        if (totalDrops >= 200) { 
+        //        y = -r*4;
+        //        image(dropImage, random(width), y, r, r);
+        if (totalDrops >= 10) { 
           // start array over
-          totalDrops=0;
+          totalDrops = 0;
         }
         timer.start();
       } 
@@ -167,7 +179,7 @@ void draw() {
         Box box = new Box();
         boxes.add(box);
         totalBoxes++;
-        if (totalBoxes >= 200) { 
+        if (totalBoxes >= 10) { 
           // start array over
           totalBoxes=0;
         }
@@ -180,11 +192,15 @@ void draw() {
         drops.get(i).move();
         drops.get(i).display();
 
+        //        drops.get(i);
+        //        y = -r*4;
+        //        image(dropImage, random(width), y, r, r);
+
         // Everytime you catch a drop, the score goes up
         if (catcher.isCollidingCircle(drops.get(i))) {
-          drops.get(i).caught();
+//          drops.get(i).caught();
+          drops.remove(i);
           coin.trigger(); //trigger playing sound when collision occurs
-          //        levelCounter++; //count this in amount of drops before new level
           score++;
         }
       }
@@ -260,7 +276,7 @@ void restart() {
   //reset variables
   totalBoxes = 0;
   totalDrops = 0;
-  lives = 3;
+  lives = 2;
   score = 0;
   timeStart = millis();
   timeRemaining = 30000;
@@ -268,7 +284,7 @@ void restart() {
   //restarting the arrays and timer
   catcher = new Catcher(); // Create the catcher 
   drops = new ArrayList<Drop>();
-  timer = new Timer(750);   // Create a timer that goes off every .5 second
+  timer = new Timer(500);   // Create a timer that goes off every .5 second
   timer.start();             // Starting the timer
 
   //array of boxes

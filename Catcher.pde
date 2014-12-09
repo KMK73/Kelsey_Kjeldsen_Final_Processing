@@ -1,5 +1,5 @@
 class Catcher {
-  PImage catcherImage;
+//  PImage catcherImage;
 //  PShape catcherImage;
   int w;   // width
   float x, y; // location
@@ -29,13 +29,13 @@ class Catcher {
     if (keyPressed) {
       //      catcher.move();
       if (keyCode == LEFT) {
-        x -= 5f;
+        x -= 6f;
         if (x <= 0) {
           x =0;
         }
       }
       if (keyCode == RIGHT) {
-        x += 5f;
+        x += 6f;
         if (x >= width- catcherImage.width) {
           x =width-catcherImage.width;
         }
