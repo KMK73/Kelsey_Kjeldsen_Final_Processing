@@ -3,7 +3,7 @@ Catcher catcher;    // One catcher object
 Timer timer;  // Timer for drops
 BoxTimer boxTimer; //timer for bricks
 
-
+//countown game timer variables
 int timeLimit = 30000;
 int timeStart = millis();
 int timeRemaining;
@@ -216,6 +216,7 @@ void draw() {
           lives--;
           //        boxes.get(i).resetWhenCollisionDetected(); //allow the box to go back to the top
           boxes.remove(i);
+
           //If lives reach 0 the game is over
           if (lives <= 0) {
             gameState = GAME_OVER;
