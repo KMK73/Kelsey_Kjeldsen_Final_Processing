@@ -44,13 +44,5 @@ class Drop {
         image(dropImage, x, y, r, r);
     }
   }
-
-//  // If the drop is caught
-//  void caught() {
-////    speed =0; //stop drop from moving and set location far off screen
-////    y = -1000;
-//  }
-//}
-
 }
 

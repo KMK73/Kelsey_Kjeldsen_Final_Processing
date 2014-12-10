@@ -194,10 +194,6 @@ void draw() {
         drops.get(i).move();
         drops.get(i).display();
 
-        //        drops.get(i);
-        //        y = -r*4;
-        //        image(dropImage, random(width), y, r, r);
-
         // Everytime you catch a drop, the score goes up
         if (catcher.isCollidingCircle(drops.get(i))) {
           //drops.get(i).caught();
@@ -248,7 +244,7 @@ void draw() {
       //grass background on bottom
       image(gamePlayingImage, 0, height - gamePlayingImage.height);
       
-      //display catcher
+      //display catcher in front of grass
       catcher.display(); 
       catcher.move();
     }
@@ -303,4 +299,4 @@ void restart() {
   boxTimer= new BoxTimer(1000);
   boxTimer.start();
 }
-
+       
