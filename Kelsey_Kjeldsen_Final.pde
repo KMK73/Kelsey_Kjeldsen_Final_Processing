@@ -15,9 +15,12 @@ AudioSample coin;
 AudioSample boxSound;
 PFont f;
 
-//load start screen image
-PImage startScreen;
-PImage gamePlayingImage;
+//load global images
+PImage startScreen; //game start image with text
+PImage gamePlayingImage; //just grass image
+PImage catcherImage; //catcher LEGO man
+PImage dropImage; //drop
+PImage gameEndImage; //full grass image
 
 // An array of drop objects
 ArrayList<Drop> drops;
@@ -44,8 +47,6 @@ int score;      // User's score
 int lives;     // 5 lives per level 
 int bestScore;
 
-PImage catcherImage;
-PImage dropImage;
 int r = 50; //radius of drop image
 int y;
 
@@ -54,11 +55,13 @@ int y;
  *********************************************************************/
 void setup() {
 
+  /* LOADING ALL GLOBAL IMAGES-------------------------------------------
+  */
   dropImage = loadImage ("star coin.png");
-  //  start screen image load
   startScreen = loadImage("startScreen1.png");
-  gamePlayingImage = loadImage("grass background.jpg");
-  //  gamePlayingImage = loadImage("grass background 2.jpg");
+  gameEndImage = loadImage("grass background.jpg");
+  gamePlayingImage = loadImage("grass-background-2.png");
+  catcherImage = loadImage ("legoMan3.png");
 
   displayX = round(displayWidth*.8);  
   displayY = round(displayHeight*.85); //have to round to make an int
@@ -112,7 +115,7 @@ void draw() {
   switch (gameState) {
   case GAME_OVER: 
     {
-      image(gamePlayingImage, 0, 0, displayX, displayY);  
+      image(gameEndImage, 0, 0, displayX, displayY);  
 
       textFont(f, 40);
       textAlign(CENTER);
@@ -135,12 +138,11 @@ void draw() {
       //removing start screen from memory cache 
       g.removeCache(startScreen);
       //background image
-      //      image(gamePlayingImage, 0, 0, displayX, displayY);
       background(#3bccdd);
-
-      //display catcher
-      catcher.display(); 
-      catcher.move();
+//
+//      //display catcher
+//      catcher.display(); 
+//      catcher.move();
 
       /*COUNTDOWN TIMER for time remaining in game
        ********************************************************/
@@ -164,7 +166,7 @@ void draw() {
         totalDrops++;
         //        y = -r*4;
         //        image(dropImage, random(width), y, r, r);
-        if (totalDrops >= 10) { 
+        if (totalDrops >= 20) { 
           // start array over
           totalDrops = 0;
         }
@@ -179,7 +181,7 @@ void draw() {
         Box box = new Box();
         boxes.add(box);
         totalBoxes++;
-        if (totalBoxes >= 10) { 
+        if (totalBoxes >= 20) { 
           // start array over
           totalBoxes=0;
         }
@@ -198,8 +200,10 @@ void draw() {
 
         // Everytime you catch a drop, the score goes up
         if (catcher.isCollidingCircle(drops.get(i))) {
-//          drops.get(i).caught();
+          //drops.get(i).caught();
           drops.remove(i);
+//          drops.remove(0);
+          
           coin.trigger(); //trigger playing sound when collision occurs
           score++;
         }
@@ -235,12 +239,18 @@ void draw() {
       fill(0);
       textAlign(LEFT); //need to reset this to keep it aligned after CENTER is called
       text("Lives left: " + lives, 60, 30); //x 60 y 30
-      fill(#3750C9);//red
+      fill(255, 0, 0);//red
       stroke(1);
       rect(60, 50, lives*30, 40); //line showing levels and the width is adjusted everytime you lose a life
-      fill(0);//black fill
+      fill(0);//red fill
       text("Time Left: " + (timeRemaining)/1000, 400, 30);  //x 400 y 30
       text("Score: " + score, 400, 80);
+      //grass background on bottom
+      image(gamePlayingImage, 0, height - gamePlayingImage.height);
+      
+      //display catcher
+      catcher.display(); 
+      catcher.move();
     }
   }
 }

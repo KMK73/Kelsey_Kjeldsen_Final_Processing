@@ -10,7 +10,7 @@ class Catcher {
    adapted by: Kelsey Kjeldsen
    ********************************************************/
   Catcher() {
-    catcherImage = loadImage("legoMan3.png");
+//    catcherImage = loadImage("legoMan3.png");
     w = int(displayWidth * .08);
     catcherImage.resize(w, 0);
     smooth();
