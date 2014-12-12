@@ -139,10 +139,6 @@ void draw() {
       g.removeCache(startScreen);
       //background image
       background(#3bccdd);
-//
-//      //display catcher
-//      catcher.display(); 
-//      catcher.move();
 
       /*COUNTDOWN TIMER for time remaining in game
        ********************************************************/
