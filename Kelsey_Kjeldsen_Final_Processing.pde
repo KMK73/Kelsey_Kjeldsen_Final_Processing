@@ -21,6 +21,7 @@ PImage gamePlayingImage; //just grass image
 PImage catcherImage; //catcher LEGO man
 PImage dropImage; //drop
 PImage gameEndImage; //full grass image
+PImage bricks;
 
 // An array of drop objects
 ArrayList<Drop> drops;
@@ -62,11 +63,11 @@ void setup() {
   gameEndImage = loadImage("grass background.jpg");
   gamePlayingImage = loadImage("grass-background-2.png");
   catcherImage = loadImage ("legoMan3.png");
-
+bricks = loadImage("bricks.png");
   displayX = round(displayWidth*.8);  
   displayY = round(displayHeight*.85); //have to round to make an int
   size(displayX, displayY);
-
+//  size(displayWidth, displayHeight);
   image(startScreen, 0, 0, displayX, displayY);
 
 
@@ -115,7 +116,7 @@ void draw() {
   switch (gameState) {
   case GAME_OVER: 
     {
-      image(gameEndImage, 0, 0, displayX, displayY);  
+      image(gameEndImage, 0, 0,displayX, displayY);  
 
       textFont(f, 40);
       textAlign(CENTER);
@@ -136,7 +137,6 @@ void draw() {
   case GAME_PLAYING: 
     {
       //removing start screen from memory cache 
-      g.removeCache(startScreen);
       //background image
       background(#3bccdd);
 
@@ -164,7 +164,8 @@ void draw() {
         //        image(dropImage, random(width), y, r, r);
         if (totalDrops >= 20) { 
           // start array over
-          totalDrops = 0;
+//          totalDrops = 0;
+          drops.remove(0);
         }
         timer.start();
       } 
@@ -180,6 +181,7 @@ void draw() {
         if (totalBoxes >= 20) { 
           // start array over
           totalBoxes=0;
+          boxes.remove(0);
         }
         boxTimer.start();
       } 
@@ -245,6 +247,8 @@ void draw() {
       catcher.move();
     }
   }
+  println("Drops size:" + drops.size());
+  println("Box size:"+ boxes.size());
 }
 
 
@@ -255,6 +259,7 @@ void keyPressed() {
   case GAME_WAITING:
     //check keys when waiting for game and spacebar to start
     if (key == ' ') {
+      g.removeCache(startScreen);
       restart();
     }
     break;

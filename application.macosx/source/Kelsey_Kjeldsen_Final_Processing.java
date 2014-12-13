@@ -1,9 +1,27 @@
-import ddf.minim.*; //for sound library
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import ddf.minim.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class Kelsey_Kjeldsen_Final_Processing extends PApplet {
+
+ //for sound library
 Catcher catcher;    // One catcher object
 Timer timer;  // Timer for drops
 BoxTimer boxTimer; //timer for bricks
 
-
+//countown game timer variables
 int timeLimit = 30000;
 int timeStart = millis();
 int timeRemaining;
@@ -15,9 +33,13 @@ AudioSample coin;
 AudioSample boxSound;
 PFont f;
 
-//load start screen image
-PImage startScreen;
-PImage gamePlayingImage;
+//load global images
+PImage startScreen; //game start image with text
+PImage gamePlayingImage; //just grass image
+PImage catcherImage; //catcher LEGO man
+PImage dropImage; //drop
+PImage gameEndImage; //full grass image
+PImage bricks;
 
 // An array of drop objects
 ArrayList<Drop> drops;
@@ -43,23 +65,29 @@ int displayY;
 int score;      // User's score
 int lives;     // 5 lives per level 
 int bestScore;
-PImage catcherImage;
+
+int r = 50; //radius of drop image
+int y;
 
 
 /* VOID SETUP 
  *********************************************************************/
-void setup() {
+public void setup() {
 
-  //  start screen image load
+  /* LOADING ALL GLOBAL IMAGES-------------------------------------------
+  */
+  dropImage = loadImage ("star coin.png");
   startScreen = loadImage("startScreen1.png");
-  gamePlayingImage = loadImage("clouds-background.png");
-  catcherImage = loadImage("legoMan3.png");
-
-  displayX = round(displayWidth*.8);
-  displayY = round(displayHeight*.85); //have to round to make an int
+  gameEndImage = loadImage("grass background.jpg");
+  gamePlayingImage = loadImage("grass-background-2.png");
+  catcherImage = loadImage ("legoMan3.png");
+bricks = loadImage("bricks.png");
+  displayX = round(displayWidth*.8f);  
+  displayY = round(displayHeight*.85f); //have to round to make an int
   size(displayX, displayY);
-
+//  size(displayWidth, displayHeight);
   image(startScreen, 0, 0, displayX, displayY);
+
 
   //timer for until game ends
   timeLimit = 30000;
@@ -79,26 +107,26 @@ void setup() {
   f = createFont("LEGOBRIX", 20, true); 
 
 
-  totalDrops = 0;
-  lives = 3; //3 lives 
+  //  totalDrops = 0;
+  lives = 2; //3 lives 
   score = 0;
   bestScore = 0;
 
   catcher = new Catcher(); // Create the catcher 
   drops = new ArrayList<Drop>();
-  timer = new Timer(600);   // Create a timer that goes off every .5 second
+  timer = new Timer(500);   // Create a timer that goes off every .5 second
   timer.start();             // Starting the timer
 
   //array of boxes
   boxes = new ArrayList<Box>();
-  boxTimer = new BoxTimer (900);   // Create a timer for bricks, goes off every .5 second
+  boxTimer = new BoxTimer (1500 );   // Create a timer for bricks, goes off every .5 second
   boxTimer.start();  // Starting the timer for bricks
   totalBoxes = 0;
 }
 
 /*VOID DRAW 
  ********************************************************/
-void draw() {
+public void draw() {
 
   /*GAME OVER FUNCTION
    ********************************************************/
@@ -106,18 +134,18 @@ void draw() {
   switch (gameState) {
   case GAME_OVER: 
     {
-      //  if (gameState==GAME_OVER) {
-      image(gamePlayingImage, 0, 0, displayX, displayY);      
-      //      background(255);
+      image(gameEndImage, 0, 0,displayX, displayY);  
+
       textFont(f, 40);
       textAlign(CENTER);
-      fill(0);
-      text("GAME OVER", width/2, height/2);
+      fill(0); //black text
+      text("GAME OVER", (width/2), (height/2)-40);
+      textFont(f, 40);
       fill(255, 0, 0);
-      textFont(f, 20);
-      text("SCORE " +score, width/2, height/2+40);
-      text("Score to beat " +bestScore, width/2, height/2+80);
-      text("To play again press SPACEBAR", width/2, height/2+120);
+      text("YOUR SCORE " +score, width/2, height/2+40);
+      fill(0);
+      text("Score to beat " +bestScore, width/2, height/2+100);
+      text("To play again press SPACEBAR", width/2, height/2+200);
     }
     break;
   }
@@ -126,13 +154,9 @@ void draw() {
   switch (gameState) {
   case GAME_PLAYING: 
     {
-      //background white
-      //      background(255);
-      image(gamePlayingImage, 0, 0, displayX, displayY);
-
-      //display catcher
-      catcher.display(); 
-      catcher.move();
+      //removing start screen from memory cache 
+      //background image
+      background(0xff3bccdd);
 
       /*COUNTDOWN TIMER for time remaining in game
        ********************************************************/
@@ -145,12 +169,8 @@ void draw() {
           bestScore = score;
         }
       }
-      println ("timeRemaining"+ timeRemaining); 
-      println ("timePassed" + timePassed);
-      println ("timeStart2 " + timeStart);
-      println ("timeLimit" + timeLimit); 
 
-      /*DROP TIMER
+      /*DROP TIMER to drop coins
        ********************************************************/
       if (timer.isFinished()) {
         // if timer is finished send another drop
@@ -158,14 +178,17 @@ void draw() {
         Drop drop = new Drop();
         drops.add(drop);
         totalDrops++;
-        if (totalDrops >= 1000) { 
+        //        y = -r*4;
+        //        image(dropImage, random(width), y, r, r);
+        if (totalDrops >= 20) { 
           // start array over
-          totalDrops=0;
+//          totalDrops = 0;
+          drops.remove(0);
         }
         timer.start();
       } 
 
-      /*BRICKS TIMER
+      /*BRICKS TIMER to drop bricks
        ********************************************************/
       if (boxTimer.isFinished()) {
         // if timer is finished send another box
@@ -173,9 +196,10 @@ void draw() {
         Box box = new Box();
         boxes.add(box);
         totalBoxes++;
-        if (totalBoxes >= 10) { 
+        if (totalBoxes >= 20) { 
           // start array over
           totalBoxes=0;
+          boxes.remove(0);
         }
         boxTimer.start();
       } 
@@ -188,9 +212,11 @@ void draw() {
 
         // Everytime you catch a drop, the score goes up
         if (catcher.isCollidingCircle(drops.get(i))) {
-          drops.get(i).caught();
+          //drops.get(i).caught();
+          drops.remove(i);
+//          drops.remove(0);
+          
           coin.trigger(); //trigger playing sound when collision occurs
-          //        levelCounter++; //count this in amount of drops before new level
           score++;
         }
       }
@@ -206,6 +232,7 @@ void draw() {
           lives--;
           //        boxes.get(i).resetWhenCollisionDetected(); //allow the box to go back to the top
           boxes.remove(i);
+
           //If lives reach 0 the game is over
           if (lives <= 0) {
             gameState = GAME_OVER;
@@ -220,38 +247,37 @@ void draw() {
       /*TOP ELEMENTS on game screen. Lives left, time remaining, game score
        ********************************************************/
 
-      //      fill(255);
-      //      noStroke();
-      //      rect( 0, 0, 600, 100);
       textFont(f, 26);
       fill(0);
       textAlign(LEFT); //need to reset this to keep it aligned after CENTER is called
       text("Lives left: " + lives, 60, 30); //x 60 y 30
-      fill(#0024FF);
+      fill(255, 0, 0);//red
       stroke(1);
-
-      for (int i = lives; i < lives; i = i+30) {
-        catcherImage = loadImage("legoMan3.png");
-        image(catcherImage, lives, 50, 40, 60);
-      }
-      //      rect(60, 50, lives*30, 40); //line showing levels and the width is adjusted everytime you lose a life
-      fill(0);//black fill
+      rect(60, 50, lives*30, 40); //line showing levels and the width is adjusted everytime you lose a life
+      fill(0);//red fill
       text("Time Left: " + (timeRemaining)/1000, 400, 30);  //x 400 y 30
       text("Score: " + score, 400, 80);
+      //grass background on bottom
+      image(gamePlayingImage, 0, height - gamePlayingImage.height);
+      
+      //display catcher in front of grass
+      catcher.display(); 
+      catcher.move();
     }
   }
+  println("Drops size:" + drops.size());
+  println("Box size:"+ boxes.size());
 }
 
 
 /*KEYS FOR CHANGING GAME STATES
  ********************************************************/
-void keyPressed() {
+public void keyPressed() {
   switch(gameState) {
   case GAME_WAITING:
     //check keys when waiting for game and spacebar to start
     if (key == ' ') {
-      //      timeStart = millis(); //want to make sure it starts at 0
-      //      gameState = GAME_PLAYING;
+      g.removeCache(startScreen);
       restart();
     }
     break;
@@ -270,13 +296,13 @@ void keyPressed() {
 
 /*RESETING THE GAME AFTER GAME ENDS
  ********************************************************/
-void restart() {
+public void restart() {
   gameState = GAME_PLAYING;
 
   //reset variables
   totalBoxes = 0;
   totalDrops = 0;
-  lives = 3;
+  lives = 2;
   score = 0;
   timeStart = millis();
   timeRemaining = 30000;
@@ -284,7 +310,7 @@ void restart() {
   //restarting the arrays and timer
   catcher = new Catcher(); // Create the catcher 
   drops = new ArrayList<Drop>();
-  timer = new Timer(750);   // Create a timer that goes off every .5 second
+  timer = new Timer(500);   // Create a timer that goes off every .5 second
   timer.start();             // Starting the timer
 
   //array of boxes
@@ -292,10 +318,9 @@ void restart() {
   boxTimer= new BoxTimer(1000);
   boxTimer.start();
 }
-
+       
 class Box {
 
-  PImage bricks;
   float speedY; //speed down for rect
   float boxWidth;
   float boxHeight;
@@ -303,27 +328,26 @@ class Box {
   float boxY;
 
   Box () {
-    bricks = loadImage("bricks.png");
-    boxHeight = random (20, displayHeight*.075);
-    boxWidth = random (displayWidth*.10, displayWidth*.20); //40% width max
+ //   bricks = loadImage("bricks.png");
+    boxHeight = random (20, displayHeight*.075f);
+    boxWidth = random (displayWidth*.10f, displayWidth*.20f); //40% width max
     boxX= random (0, width -40);
     boxY= random (-100, 0);
     speedY= random(1, 4);
   }
 
-  void display () {
-    fill (#00FF39);
+  public void display () {
+    fill (0xff00FF39);
     stroke(1);
-    //    rect(boxX, boxY, boxWidth, boxHeight);
     image(bricks, boxX, boxY, boxWidth, boxHeight); 
     boxY= boxY + speedY;
   }
 
 //needed to reset after a collision so lives dont reduce all at once
-void resetWhenCollisionDetected() {
+public void resetWhenCollisionDetected() {
   boxY=-10;
   boxX = random(width); //change x position at the top
-  speedY = random(1, 2.5);
+  speedY = random(1, 2.5f);
 }
 }
 /*code adapted from:
@@ -342,18 +366,18 @@ class BoxTimer {
     totalTime = tempTotalTime;
   }
 
-  void setTime(int t) {
+  public void setTime(int t) {
     totalTime = t;
   }
 
   // Starting the timer
-  void start() {
+  public void start() {
     // When the timer starts it stores the current time in milliseconds.
     savedTime = millis();
   }
 
   // The function isFinished() returns true if 1000ms pass
-  boolean isFinished() { 
+  public boolean isFinished() { 
     // Check how much time has passed
     int passedTime = millis()- savedTime;
     if (passedTime > totalTime) {
@@ -364,7 +388,7 @@ class BoxTimer {
   }
 }
 class Catcher {
-  PImage catcherImage;
+//  PImage catcherImage;
 //  PShape catcherImage;
   int w;   // width
   float x, y; // location
@@ -375,9 +399,8 @@ class Catcher {
    adapted by: Kelsey Kjeldsen
    ********************************************************/
   Catcher() {
-    catcherImage = loadImage("legoMan3.png");
-//    catcherImage = loadShape("legoMan3.svg");
-    w = int(displayWidth * .08);
+//    catcherImage = loadImage("legoMan3.png");
+    w = PApplet.parseInt(displayWidth * .08f);
     catcherImage.resize(w, 0);
     smooth();
     x = width/2;
@@ -385,24 +408,23 @@ class Catcher {
     speedX = 0;
   }
 
-  void display() {
+  public void display() {
     stroke(0);
     image(catcherImage, x, y); 
-//     shape(catcherImage, x, y, w, w);
   }
 
-  void move () { 
+  public void move () { 
     // Display the catcher
     if (keyPressed) {
       //      catcher.move();
       if (keyCode == LEFT) {
-        x -= 4f;
+        x -= 6f;
         if (x <= 0) {
           x =0;
         }
       }
       if (keyCode == RIGHT) {
-        x += 4f;
+        x += 6f;
         if (x >= width- catcherImage.width) {
           x =width-catcherImage.width;
         }
@@ -414,7 +436,7 @@ class Catcher {
    http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
    adapted by: Kelsey Kjeldsen
    ********************************************************/
-  boolean isCollidingCircle(Drop d) {
+  public boolean isCollidingCircle(Drop d) {
     //calculate the distance in absolute value of the drops and the rectangle
     float circleDistanceX = abs(d.x - x - catcherImage.width/2);
     float circleDistanceY = abs(d.y - y - catcherImage.height/2);
@@ -439,7 +461,7 @@ class Catcher {
   }
 
   //Box b is made for a temporary reference of either box1 or box2 when they pass through the boolean
-  boolean isCollidingBox(Box b) {
+  public boolean isCollidingBox(Box b) {
     float myX2 = x+ catcherImage.width; // box x and width
     //    float myX2 = x + w; // box x and width
     float myY2 = y + catcherImage.height; //box y and height
@@ -478,27 +500,27 @@ class Drop {
   float x, y;
   PImage drop;  
   float speed; 
-  color c;
   float r;     
 
   // New variable to keep track of whether drop is caught
   boolean caught = false;
 
   Drop() {
-    r = 30;               
+    r = 50;               
     x = random(width);    
     y = -r*4;              // Start a little above the window
     speed = random(3, 6);   // Pick a random speed
-    drop = loadImage ("coin.png");
+//    drop = loadImage ("star coin.png");
+
   }
 
   // Move the drop down
-  void move() {
+  public void move() {
     y += speed;
   }
 
   // Check if it hits the bottom
-  boolean reachedBottom() {
+  public boolean reachedBottom() {
     if (y > height + r*4) { 
       return true;
     } else {
@@ -507,20 +529,13 @@ class Drop {
   }
 
   // Display the drop
-  void display() {
+  public void display() {
     noStroke();
-    for (int i = 2; i < r; i++ ) {
-        image(drop, x, y, r, r);
-    }
-  }
-
-  // If the drop is caught
-  void caught() {
-    speed =0; //stop drop from moving and set location far off screen
-    y = -1000;
+//    for (int i = 2; i < r; i++ ) {
+        image(dropImage, x, y, r, r);
+//    }
   }
 }
-
 
 /*code adapted from:
  // Learning Processing
@@ -537,18 +552,18 @@ class Timer {
     totalTime = tempTotalTime;
   }
 
-  void setTime(int t) {
+  public void setTime(int t) {
     totalTime = t;
   }
 
   // Starting the timer
-  void start() {
+  public void start() {
     // When the timer starts it stores the current time in milliseconds.
     savedTime = millis();
   }
 
   // The function isFinished() returns true if 1000ms pass
-  boolean isFinished() { 
+  public boolean isFinished() { 
     // Check how much time has passed
     int passedTime = millis()- savedTime;
     if (passedTime > totalTime) {
@@ -558,4 +573,12 @@ class Timer {
     }
   }
 }
-
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "--full-screen", "--bgcolor=#666666", "--stop-color=#cccccc", "Kelsey_Kjeldsen_Final_Processing" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
+  }
+}
