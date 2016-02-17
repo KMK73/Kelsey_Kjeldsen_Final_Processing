@@ -247,8 +247,8 @@ void draw() {
       catcher.move();
     }
   }
-  println("Drops size:" + drops.size());
-  println("Box size:"+ boxes.size());
+//  println("Drops size:" + drops.size());
+//  println("Box size:"+ boxes.size());
 }
 
 
