@@ -59,9 +59,9 @@ void setup() {
   /* LOADING ALL GLOBAL IMAGES-------------------------------------------
   */
   dropImage = loadImage ("star coin.png");
-  startScreen = loadImage("startScreen1.png");
+  startScreen = loadImage("startScreen-filmgate.png");
   gameEndImage = loadImage("grass background.jpg");
-  gamePlayingImage = loadImage("grass-background-2.png");
+  gamePlayingImage = loadImage("grass background.jpg");
   catcherImage = loadImage ("legoMan3.png");
 bricks = loadImage("bricks.png");
   displayX = round(displayWidth*.8);  
